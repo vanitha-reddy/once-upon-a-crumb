@@ -1,7 +1,7 @@
 (function(){
 /* ---------- illustrations ---------- */
 const art = {
-  cookie:(c)=>`<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="40" fill="${c[0]}"/><circle cx="50" cy="52" r="40" fill="none" stroke="${c[1]}" stroke-width="3" stroke-dasharray="6 9" opacity=".5"/>${[[35,38],[60,34],[66,58],[42,66],[52,50],[28,58]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="4" fill="${c[1]}"/>`).join('')}</svg>`,
+  cookie:(c)=>`<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="40" fill="${c[0]}"/><circle cx="50" cy="52" r="40" fill="none" stroke="${[].concat(c[1])[0]}" stroke-width="3" stroke-dasharray="6 9" opacity=".5"/>${[[35,38],[60,34],[66,58],[42,66],[52,50],[28,58]].map(([x,y],i)=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="4" fill="${[].concat(c[1])[i%[].concat(c[1]).length]}"/>`).join('')}</svg>`,
   cupcake:(c)=>`<svg viewBox="0 0 100 100"><path d="M24 54h52l-8 38H32z" fill="${c[1]}"/><path d="M34 56l3 34M44 56l1 34M56 56l-1 34M66 56l-3 34" stroke="#00000022" stroke-width="3"/><path d="M20 56c-4-14 8-22 16-20 0-12 12-20 22-14 8-6 22 0 20 12 10 2 12 16 4 22z" fill="${c[0]}"/><circle cx="54" cy="18" r="8" fill="${c[2]}"/><path d="M54 10q4-6 9-6" stroke="#6E9B60" stroke-width="3" fill="none"/></svg>`,
   brownie:(c)=>`<svg viewBox="0 0 100 100"><path d="M14 40l36-16 36 16v34l-36 16-36-16z" fill="${c[1]}"/><path d="M14 40l36 16 36-16-36-16z" fill="${c[0]}"/><path d="M50 56v34" stroke="#00000022" stroke-width="2"/>${[[40,38],[55,33],[60,44],[34,46]].map(([x,y])=>`<path d="M${x} ${y}l4-3 3 4z" fill="${c[2]}"/>`).join('')}</svg>`,
   cake:(c)=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="84" rx="40" ry="9" fill="${c[1]}"/><rect x="10" y="40" width="80" height="44" fill="${c[1]}"/><rect x="10" y="58" width="80" height="6" fill="${c[0]}"/><ellipse cx="50" cy="40" rx="40" ry="9" fill="${c[0]}"/>${[22,36,50,64,78].map(x=>`<circle cx="${x}" cy="38" r="4" fill="${c[2]}"/>`).join('')}<rect x="48" y="16" width="4" height="18" fill="${c[2]}"/><path d="M50 6q5 6 0 10q-5-4 0-10" fill="#F2BE4B"/></svg>`,
@@ -11,22 +11,18 @@ const art = {
 
 /* ---------- menu data (edit treats and prices here) ---------- */
 // disc: the coloured circle each treat sits on (butter, lav, pink, sky, mint, peach)
+// img: optional photo path, e.g. 'images/nutella.png'; without one the drawn cookie is used
+// Prices are placeholders until confirmed.
 const MENU = [
-  {id:'bbcc', name:'Brown Butter Chocolate Chunk', short:'Brown butter chunk', cat:'Cookies', price:3.5, unit:'each', desc:'Nutty brown butter, dark chocolate puddles and a pinch of flaky salt.', tags:[], kind:'cookie', c:['#C98A4B','#3A1E14'], disc:'butter', flag:'Bestseller', box:true},
-  {id:'pista', name:'Pistachio Rose Shortbread', short:'Pistachio rose', cat:'Cookies', price:3.75, unit:'each', desc:'Buttery shortbread with crushed pistachio and a hint of rosewater.', tags:['Nuts'], kind:'cookie', c:['#D9C27A','#7FA36A'], disc:'pink', box:true},
-  {id:'snick', name:'Salted Caramel Snickerdoodle', short:'Caramel snickerdoodle', cat:'Cookies', price:3.5, unit:'each', desc:'Cinnamon-sugar crust with a soft caramel centre.', tags:[], kind:'cookie', c:['#E2B077','#A0612A'], disc:'lav', box:true},
-  {id:'lemon', name:'Lemon Blueberry Crinkle', short:'Lemon blueberry', cat:'Cookies', price:3.5, unit:'each', desc:'Bright, chewy and dusted in powdered sugar. Made with almond flour.', tags:['GF','Nuts'], kind:'cookie', c:['#F4E3A3','#4B4C9A'], disc:'sky', box:true},
-  {id:'chai', name:'Masala Chai Sugar Cookie', short:'Masala chai', cat:'Cookies', price:3.5, unit:'each', desc:'Cardamom, ginger and cinnamon with a chai glaze.', tags:['Vegan'], kind:'cookie', c:['#D6A673','#7A4A2A'], disc:'mint', box:true},
-  {id:'straw', name:'Strawberry Shortcake Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Vanilla sponge, fresh strawberry filling and whipped mascarpone.', tags:[], kind:'cupcake', c:['#F7B6C6','#F2D9A8','#E0445E'], disc:'mint', flag:'New'},
-  {id:'mango', name:'Mango Lassi Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Mango and yogurt cake with cardamom cream cheese frosting.', tags:[], kind:'cupcake', c:['#FFD27A','#F5E6C4','#F29B38'], disc:'lav'},
-  {id:'cocoa', name:'Double Cocoa Cupcake', cat:'Cupcakes', price:4.0, unit:'each', desc:'Dark chocolate cake under a cloud of fudge frosting.', tags:['Vegan'], kind:'cupcake', c:['#6B3A2A','#3A1E14','#E0445E'], disc:'peach'},
-  {id:'fudge', name:'Fudgy Sea Salt Brownie', cat:'Brownies', price:4.0, unit:'each', desc:'Crackly top, molten middle, finished with Maldon salt.', tags:[], kind:'brownie', c:['#5A2E1F','#3A1C12','#F5EFE6'], disc:'sky', flag:'Bestseller'},
-  {id:'biscoff', name:'Biscoff Blondie', cat:'Brownies', price:4.0, unit:'each', desc:'Brown sugar blondie swirled with cookie butter.', tags:[], kind:'bar', c:['#E4B06C','#C98A4B','#8A4E22'], disc:'pink'},
-  {id:'cele', name:'Celebration Cake', cat:'Cakes', price:42, unit:'6-inch, serves 8', desc:'Vanilla bean layers, berry jam and buttercream. Add a message in the notes.', tags:[], kind:'cake', c:['#F7C3CF','#FFF6EE','#E0445E'], disc:'butter', lead:5},
-  {id:'rasm', name:'Rasmalai Tres Leches', cat:'Cakes', price:48, unit:'8-inch, serves 12', desc:'Saffron milk-soaked sponge with pistachio and rose petals.', tags:['Nuts'], kind:'cake', c:['#F3D58C','#FFF4DE','#7FA36A'], disc:'lav', lead:5, flag:'Fan favourite'},
-  {id:'mac', name:'Macaron Box', cat:'Boxes', price:28, unit:'box of 12', desc:'Raspberry, pistachio, salted caramel and earl grey, three of each.', tags:['GF','Nuts'], kind:'macaron', c:['#F59BB0','#FFF3E6','#A8D08D'], disc:'peach'}
+  {id:'nutella', name:'Nutella Hazelnut', short:'Nutella hazelnut', cat:'Cookies', price:3.5, unit:'each', desc:'A soft chocolate-studded cookie with a gooey Nutella centre and toasted hazelnuts.', tags:['Nuts'], kind:'cookie', c:['#B9783F','#4A2416'], disc:'butter', flag:'Bestseller', box:true},
+  {id:'kinder', name:'Kinder Bueno', short:'Kinder Bueno', cat:'Cookies', price:3.5, unit:'each', desc:'Milk chocolate cookie with a hazelnut cream filling, topped with a piece of Kinder Bueno.', tags:['Nuts'], kind:'cookie', c:['#D9A866',['#F5EBDD','#6B3A1F']], disc:'sky', box:true},
+  {id:'mm', name:'M&M', short:'M&M', cat:'Cookies', price:3.5, unit:'each', desc:'Chewy vanilla cookie loaded with crunchy, colourful M&Ms.', tags:[], kind:'cookie', c:['#E8BF85',['#E5574B','#3C7DD9','#F4C430','#3BA55C','#8A4E22','#F08A24']], disc:'lav', box:true},
+  {id:'biscoff', name:'Lotus Biscoff', short:'Lotus Biscoff', cat:'Cookies', price:3.5, unit:'each', desc:'Brown sugar cookie with a melting Biscoff spread centre and crushed Lotus biscuits.', tags:[], kind:'cookie', c:['#C98A4B','#8A4E22'], disc:'pink', box:true},
+  {id:'oreo', name:'Oreo Cookies and Cream', short:'Oreo cookies and cream', cat:'Cookies', price:3.5, unit:'each', desc:'Dark cocoa cookie packed with Oreo pieces and a creamy cookies-and-cream filling.', tags:[], kind:'cookie', c:['#2E2220','#F5EFE6'], disc:'mint', flag:'New', box:true},
+  {id:'toffee', name:'Toffee Chocolate Chunk', short:'Toffee choc chunk', cat:'Cookies', price:3.5, unit:'each', desc:'Buttery cookie with chunks of dark chocolate and bits of crunchy toffee.', tags:[], kind:'cookie', c:['#D9A15E',['#3A1E14','#E2A23B']], disc:'peach', box:true}
 ];
-const CATEGORIES = ['All','Cookies','Cupcakes','Brownies','Cakes','Boxes'];
+// Filters only show for categories that have treats on the menu
+const CATEGORIES = ['All', ...['Cookies','Cupcakes','Brownies','Cakes','Boxes'].filter(c=>MENU.some(m=>m.cat===c))];
 const BOX_PRICE = 19, BOX_SIZE = 6, BASE_LEAD = 2, CAKE_LEAD = 5;
 const SLOTS = {5:['4 to 5 pm','5 to 6 pm','6 to 7 pm'], 6:['10 to 11 am','11 am to 12 pm','12 to 1 pm','1 to 2 pm']};
 const byId = Object.fromEntries(MENU.map(m=>[m.id,m]));
@@ -34,7 +30,8 @@ const boxable = MENU.filter(m=>m.box);
 const $ = id => document.getElementById(id);
 const money = n => '$' + n.toFixed(2);
 const esc = s => String(s).replace(/[<>&"]/g, ch => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]));
-const plate = (m, kind) => `<div class="plate" style="background:var(--${m.disc})">${art[kind||m.kind](m.c)}</div>`;
+const pic = (m, kind) => m.img ? `<img src="${m.img}" alt="">` : art[kind||m.kind](m.c);
+const plate = (m, kind) => `<div class="plate" style="background:var(--${m.disc})">${pic(m, kind)}</div>`;
 const stepper = (attrs, n, {min=0, maxed=false, label=''}={}) => `
   <div class="stepper"><button type="button" ${attrs} data-d="-1" aria-label="One fewer ${label}" ${n<=min?'disabled':''}>−</button><output>${n}</output><button type="button" class="plus" ${attrs} data-d="1" aria-label="One more ${label}" ${maxed?'disabled':''}>+</button></div>`;
 
@@ -54,9 +51,9 @@ burger.addEventListener('click', ()=>{ const open = navLinks.classList.toggle('o
 navLinks.addEventListener('click', e=>{ if(e.target.closest('a')){ navLinks.classList.remove('open'); burger.setAttribute('aria-expanded', false); } });
 
 /* ---------- hero plates ---------- */
-const order = ['bbcc','straw','fudge','lemon','cele','chai','mango','mac','pista','cocoa','biscoff','snick','rasm'];
-$('platesTop').innerHTML = order.slice(0,7).map(id=>plate(byId[id])).join('');
-$('platesBottom').innerHTML = order.slice(6).map(id=>plate(byId[id])).join('');
+const strip = offset => Array.from({length:7}, (_,i)=>plate(MENU[(i+offset)%MENU.length])).join('');
+$('platesTop').innerHTML = strip(0);
+$('platesBottom').innerHTML = strip(3);
 
 /* ---------- cutoff clock: orders close Thursday 8 pm for that weekend ---------- */
 function nextCutoff(now){
@@ -85,6 +82,7 @@ tick(); setInterval(tick, 1000);
 
 /* ---------- menu ---------- */
 const chipsEl = $('chips');
+chipsEl.hidden = CATEGORIES.length <= 2;
 chipsEl.innerHTML = CATEGORIES.map(c=>`<button class="pill" type="button" data-cat="${c}" aria-pressed="${c===filter}">${c}</button>`).join('');
 chipsEl.addEventListener('click', e=>{
   const b = e.target.closest('[data-cat]'); if(!b) return;
@@ -96,7 +94,7 @@ const qtyOf = id => (bag.find(l=>l.id===id)||{qty:0}).qty;
 function renderMenu(){
   $('grid').innerHTML = MENU.filter(m=>filter==='All'||m.cat===filter).map(m=>`
     <article class="item">
-      <div class="plate" style="background:var(--${m.disc})">${art[m.kind](m.c)}${m.flag?`<span class="flag">${m.flag}</span>`:''}</div>
+      <div class="plate" style="background:var(--${m.disc})">${pic(m)}${m.flag?`<span class="flag">${m.flag}</span>`:''}</div>
       <h3>${m.name}</h3>
       <p>${m.desc}</p>
       ${m.tags.length||m.lead?`<div class="meta">${m.tags.map(t=>`<span>${t}</span>`).join('')}${m.lead?`<span class="notice">${m.lead} days' notice</span>`:''}</div>`:''}
@@ -124,7 +122,7 @@ function renderBox(){
       ${stepper(`data-fl="${m.id}"`, countIn(m.id), {maxed:full, label:m.name})}</div>`).join('');
   $('slots').innerHTML = Array.from({length:BOX_SIZE},(_,i)=>{
     const id = boxSlots[i];
-    return id ? `<button class="slot filled" type="button" data-i="${i}" style="background:var(--${byId[id].disc})" aria-label="Take out ${byId[id].name}">${art.cookie(byId[id].c)}</button>`
+    return id ? `<button class="slot filled" type="button" data-i="${i}" style="background:var(--${byId[id].disc})" aria-label="Take out ${byId[id].name}">${pic(byId[id],'cookie')}</button>`
               : `<div class="slot" aria-hidden="true"></div>`;
   }).join('');
   $('boxMeter').textContent = `${boxSlots.length} of ${BOX_SIZE}`;
