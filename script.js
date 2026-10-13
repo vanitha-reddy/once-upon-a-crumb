@@ -9,42 +9,59 @@ const art = {
   bar:(c)=>`<svg viewBox="0 0 100 100"><rect x="14" y="30" width="72" height="44" rx="8" fill="${c[1]}"/><rect x="14" y="30" width="72" height="16" rx="8" fill="${c[0]}"/>${[[26,38],[46,36],[66,39]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="${c[2]}"/>`).join('')}</svg>`
 };
 
-/* ---------- menu data (edit prices and items here) ---------- */
+/* ---------- menu data (edit treats and prices here) ---------- */
+// disc: the coloured circle each treat sits on (butter, lav, pink, sky, mint, peach)
 const MENU = [
-  {id:'bbcc', name:'Brown Butter Chocolate Chunk', cat:'Cookies', price:3.5, unit:'each', desc:'Nutty brown butter, dark chocolate puddles and a pinch of flaky salt.', tags:[], kind:'cookie', c:['#C98A4B','#3A1E14'], flag:'Bestseller', box:true},
-  {id:'pista', name:'Pistachio Rose Shortbread', cat:'Cookies', price:3.75, unit:'each', desc:'Buttery shortbread with crushed pistachio and a hint of rosewater.', tags:['Nuts'], kind:'cookie', c:['#D9C27A','#7FA36A'], box:true},
-  {id:'snick', name:'Salted Caramel Snickerdoodle', cat:'Cookies', price:3.5, unit:'each', desc:'Cinnamon-sugar crust with a soft caramel centre.', tags:[], kind:'cookie', c:['#E2B077','#A0612A'], box:true},
-  {id:'lemon', name:'Lemon Blueberry Crinkle', cat:'Cookies', price:3.5, unit:'each', desc:'Bright, chewy and dusted in powdered sugar. Made with almond flour.', tags:['GF','Nuts'], kind:'cookie', c:['#F4E3A3','#4B4C9A'], box:true},
-  {id:'chai', name:'Masala Chai Sugar Cookie', cat:'Cookies', price:3.5, unit:'each', desc:'Cardamom, ginger and cinnamon with a chai glaze.', tags:['Vegan'], kind:'cookie', c:['#D6A673','#7A4A2A'], box:true},
-  {id:'straw', name:'Strawberry Shortcake Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Vanilla sponge, fresh strawberry filling and whipped mascarpone.', tags:[], kind:'cupcake', c:['#F7B6C6','#F2D9A8','#E0445E'], flag:'New'},
-  {id:'mango', name:'Mango Lassi Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Mango and yogurt cake with cardamom cream cheese frosting.', tags:[], kind:'cupcake', c:['#FFD27A','#F5E6C4','#F29B38']},
-  {id:'cocoa', name:'Double Cocoa Cupcake', cat:'Cupcakes', price:4.0, unit:'each', desc:'Dark chocolate cake under a cloud of fudge frosting.', tags:['Vegan'], kind:'cupcake', c:['#6B3A2A','#3A1E14','#E0445E']},
-  {id:'fudge', name:'Fudgy Sea Salt Brownie', cat:'Brownies', price:4.0, unit:'each', desc:'Crackly top, molten middle, finished with Maldon salt.', tags:[], kind:'brownie', c:['#5A2E1F','#3A1C12','#F5EFE6'], flag:'Bestseller'},
-  {id:'biscoff', name:'Biscoff Blondie', cat:'Brownies', price:4.0, unit:'each', desc:'Brown sugar blondie swirled with cookie butter.', tags:[], kind:'bar', c:['#E4B06C','#C98A4B','#8A4E22']},
-  {id:'cele', name:'Celebration Cake', cat:'Cakes', price:42, unit:'6-inch, serves 8', desc:'Vanilla bean layers, berry jam and buttercream. Add a message in the notes.', tags:[], kind:'cake', c:['#F7C3CF','#FFF6EE','#E0445E'], lead:5},
-  {id:'rasm', name:'Rasmalai Tres Leches', cat:'Cakes', price:48, unit:'8-inch, serves 12', desc:'Saffron milk-soaked sponge with pistachio and rose petals.', tags:['Nuts'], kind:'cake', c:['#F3D58C','#FFF4DE','#7FA36A'], lead:5, flag:'Pre-order favourite'},
-  {id:'mac', name:'Macaron Box', cat:'Boxes', price:28, unit:'box of 12', desc:'Raspberry, pistachio, salted caramel and earl grey, three of each.', tags:['GF','Nuts'], kind:'macaron', c:['#F59BB0','#FFF3E6','#A8D08D']}
+  {id:'bbcc', name:'Brown Butter Chocolate Chunk', short:'Brown butter chunk', cat:'Cookies', price:3.5, unit:'each', desc:'Nutty brown butter, dark chocolate puddles and a pinch of flaky salt.', tags:[], kind:'cookie', c:['#C98A4B','#3A1E14'], disc:'butter', flag:'Bestseller', box:true},
+  {id:'pista', name:'Pistachio Rose Shortbread', short:'Pistachio rose', cat:'Cookies', price:3.75, unit:'each', desc:'Buttery shortbread with crushed pistachio and a hint of rosewater.', tags:['Nuts'], kind:'cookie', c:['#D9C27A','#7FA36A'], disc:'pink', box:true},
+  {id:'snick', name:'Salted Caramel Snickerdoodle', short:'Caramel snickerdoodle', cat:'Cookies', price:3.5, unit:'each', desc:'Cinnamon-sugar crust with a soft caramel centre.', tags:[], kind:'cookie', c:['#E2B077','#A0612A'], disc:'lav', box:true},
+  {id:'lemon', name:'Lemon Blueberry Crinkle', short:'Lemon blueberry', cat:'Cookies', price:3.5, unit:'each', desc:'Bright, chewy and dusted in powdered sugar. Made with almond flour.', tags:['GF','Nuts'], kind:'cookie', c:['#F4E3A3','#4B4C9A'], disc:'sky', box:true},
+  {id:'chai', name:'Masala Chai Sugar Cookie', short:'Masala chai', cat:'Cookies', price:3.5, unit:'each', desc:'Cardamom, ginger and cinnamon with a chai glaze.', tags:['Vegan'], kind:'cookie', c:['#D6A673','#7A4A2A'], disc:'mint', box:true},
+  {id:'straw', name:'Strawberry Shortcake Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Vanilla sponge, fresh strawberry filling and whipped mascarpone.', tags:[], kind:'cupcake', c:['#F7B6C6','#F2D9A8','#E0445E'], disc:'mint', flag:'New'},
+  {id:'mango', name:'Mango Lassi Cupcake', cat:'Cupcakes', price:4.25, unit:'each', desc:'Mango and yogurt cake with cardamom cream cheese frosting.', tags:[], kind:'cupcake', c:['#FFD27A','#F5E6C4','#F29B38'], disc:'lav'},
+  {id:'cocoa', name:'Double Cocoa Cupcake', cat:'Cupcakes', price:4.0, unit:'each', desc:'Dark chocolate cake under a cloud of fudge frosting.', tags:['Vegan'], kind:'cupcake', c:['#6B3A2A','#3A1E14','#E0445E'], disc:'peach'},
+  {id:'fudge', name:'Fudgy Sea Salt Brownie', cat:'Brownies', price:4.0, unit:'each', desc:'Crackly top, molten middle, finished with Maldon salt.', tags:[], kind:'brownie', c:['#5A2E1F','#3A1C12','#F5EFE6'], disc:'sky', flag:'Bestseller'},
+  {id:'biscoff', name:'Biscoff Blondie', cat:'Brownies', price:4.0, unit:'each', desc:'Brown sugar blondie swirled with cookie butter.', tags:[], kind:'bar', c:['#E4B06C','#C98A4B','#8A4E22'], disc:'pink'},
+  {id:'cele', name:'Celebration Cake', cat:'Cakes', price:42, unit:'6-inch, serves 8', desc:'Vanilla bean layers, berry jam and buttercream. Add a message in the notes.', tags:[], kind:'cake', c:['#F7C3CF','#FFF6EE','#E0445E'], disc:'butter', lead:5},
+  {id:'rasm', name:'Rasmalai Tres Leches', cat:'Cakes', price:48, unit:'8-inch, serves 12', desc:'Saffron milk-soaked sponge with pistachio and rose petals.', tags:['Nuts'], kind:'cake', c:['#F3D58C','#FFF4DE','#7FA36A'], disc:'lav', lead:5, flag:'Fan favourite'},
+  {id:'mac', name:'Macaron Box', cat:'Boxes', price:28, unit:'box of 12', desc:'Raspberry, pistachio, salted caramel and earl grey, three of each.', tags:['GF','Nuts'], kind:'macaron', c:['#F59BB0','#FFF3E6','#A8D08D'], disc:'peach'}
 ];
 const CATEGORIES = ['All','Cookies','Cupcakes','Brownies','Cakes','Boxes'];
 const BOX_PRICE = 19, BOX_SIZE = 6, BASE_LEAD = 2, CAKE_LEAD = 5;
+const SLOTS = {5:['4 to 5 pm','5 to 6 pm','6 to 7 pm'], 6:['10 to 11 am','11 am to 12 pm','12 to 1 pm','1 to 2 pm']};
 const byId = Object.fromEntries(MENU.map(m=>[m.id,m]));
+const boxable = MENU.filter(m=>m.box);
+const $ = id => document.getElementById(id);
 const money = n => '$' + n.toFixed(2);
 const esc = s => String(s).replace(/[<>&"]/g, ch => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[ch]));
+const plate = (m, kind) => `<div class="plate" style="background:var(--${m.disc})">${art[kind||m.kind](m.c)}</div>`;
+const stepper = (attrs, n, {min=0, maxed=false, label=''}={}) => `
+  <div class="stepper"><button type="button" ${attrs} data-d="-1" aria-label="One fewer ${label}" ${n<=min?'disabled':''}>−</button><output>${n}</output><button type="button" class="plus" ${attrs} data-d="1" aria-label="One more ${label}" ${maxed?'disabled':''}>+</button></div>`;
 
 /* ---------- state ---------- */
-let bag = load('sd-bag', []);          // [{key, id?, box?:[ids], qty}]
+let bag = load();                       // [{key, id?, box?:[ids], qty}]
 let boxSlots = [];
 let filter = 'All';
 let pickup = {date:null, time:null};
-let step = 'bag';                       // bag | done
-function load(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return Array.isArray(v) ? v.filter(validLine) : d; }catch(e){ return d; } }
-function validLine(l){ return l && l.qty > 0 && (l.box ? l.box.every(i=>byId[i]) : byId[l.id]); }
+let step = 'bag';                       // bag | when | done
+let form = {name:'', phone:'', notes:''};
+function load(){ try{ const v = JSON.parse(localStorage.getItem('sd-bag')); return Array.isArray(v) ? v.filter(l=>l && l.qty>0 && (l.box ? l.box.every(i=>byId[i]) : byId[l.id])) : []; }catch(e){ return []; } }
 function save(){ try{ localStorage.setItem('sd-bag', JSON.stringify(bag)); }catch(e){} }
+
+/* ---------- header ---------- */
+const burger = $('burger'), navLinks = $('navLinks');
+burger.addEventListener('click', ()=>{ const open = navLinks.classList.toggle('open'); burger.setAttribute('aria-expanded', open); });
+navLinks.addEventListener('click', e=>{ if(e.target.closest('a')){ navLinks.classList.remove('open'); burger.setAttribute('aria-expanded', false); } });
+
+/* ---------- hero plates ---------- */
+const order = ['bbcc','straw','fudge','lemon','cele','chai','mango','mac','pista','cocoa','biscoff','snick','rasm'];
+$('platesTop').innerHTML = order.slice(0,7).map(id=>plate(byId[id])).join('');
+$('platesBottom').innerHTML = order.slice(6).map(id=>plate(byId[id])).join('');
 
 /* ---------- cutoff clock: orders close Thursday 8 pm for that weekend ---------- */
 function nextCutoff(now){
   const d = new Date(now); d.setHours(20,0,0,0);
-  const add = (4 - d.getDay() + 7) % 7; d.setDate(d.getDate() + add);
+  d.setDate(d.getDate() + (4 - d.getDay() + 7) % 7);
   if (d <= now) d.setDate(d.getDate() + 7);
   return d;
 }
@@ -53,225 +70,246 @@ function tick(){
   let s = Math.max(0, Math.floor((end - now)/1000));
   const dd = Math.floor(s/86400); s%=86400;
   const hh = Math.floor(s/3600); s%=3600;
-  const mm = Math.floor(s/60), ss = s%60;
   const p = n => String(n).padStart(2,'0');
-  document.getElementById('cd-d').textContent = dd;
-  document.getElementById('cd-h').textContent = p(hh);
-  document.getElementById('cd-m').textContent = p(mm);
-  document.getElementById('cd-s').textContent = p(ss);
+  $('cd-d').textContent = dd;
+  $('cd-h').textContent = p(hh);
+  $('cd-m').textContent = p(Math.floor(s/60));
+  $('cd-s').textContent = p(s%60);
   const fri = new Date(end); fri.setDate(end.getDate()+1);
   const sat = new Date(end); sat.setDate(end.getDate()+2);
   const f = d => d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
-  document.getElementById('cutoffTitle').textContent = `Orders close Thursday ${f(end)} at 8 pm`;
-  document.getElementById('cutoffNote').textContent = `For pickup Friday ${f(fri)} (4–7 pm) or Saturday ${f(sat)} (10 am–2 pm).`;
+  $('cutoffTitle').textContent = `Orders close Thursday ${f(end)} at 8 pm`;
+  $('cutoffNote').textContent = `For pickup Friday ${f(fri)}, 4 to 7 pm, or Saturday ${f(sat)}, 10 am to 2 pm.`;
 }
 tick(); setInterval(tick, 1000);
 
-/* ---------- ticker ---------- */
-const tickerItems = ['Fresh every Friday & Saturday',"Cakes need 5 days' notice",'Mix & match 6 cookies for $19','Vegan and gluten-free options','Pay at pickup'];
-document.getElementById('ticker').innerHTML = [...tickerItems,...tickerItems].map(t=>`<span>✦ ${esc(t)}</span>`).join('');
-
 /* ---------- menu ---------- */
-const chipsEl = document.getElementById('chips');
-chipsEl.innerHTML = CATEGORIES.map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${c===filter}">${c}</button>`).join('');
+const chipsEl = $('chips');
+chipsEl.innerHTML = CATEGORIES.map(c=>`<button class="pill" type="button" data-cat="${c}" aria-pressed="${c===filter}">${c}</button>`).join('');
 chipsEl.addEventListener('click', e=>{
-  const b = e.target.closest('.chip'); if(!b) return;
+  const b = e.target.closest('[data-cat]'); if(!b) return;
   filter = b.dataset.cat;
-  chipsEl.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed', x===b));
+  chipsEl.querySelectorAll('[data-cat]').forEach(x=>x.setAttribute('aria-pressed', x===b));
   renderMenu();
 });
+const qtyOf = id => (bag.find(l=>l.id===id)||{qty:0}).qty;
 function renderMenu(){
-  const items = MENU.filter(m=>filter==='All'||m.cat===filter);
-  document.getElementById('grid').innerHTML = items.map(m=>`
-    <article class="card">
-      <div class="art">${m.flag?`<span class="badge">${m.flag}</span>`:''}${art[m.kind](m.c)}</div>
-      <div class="body">
-        <h3>${m.name}</h3>
-        <p>${m.desc}</p>
-        <div class="tags">${m.tags.map(t=>`<span class="tag">${t}</span>`).join('')}${m.lead?`<span class="tag lead">${m.lead} days' notice</span>`:''}</div>
-        <div class="buy"><span class="price">${money(m.price)} <small>${m.unit}</small></span>
-          <button class="add" type="button" data-add="${m.id}">Add</button></div>
-      </div>
+  $('grid').innerHTML = MENU.filter(m=>filter==='All'||m.cat===filter).map(m=>`
+    <article class="item">
+      <div class="plate" style="background:var(--${m.disc})">${art[m.kind](m.c)}${m.flag?`<span class="flag">${m.flag}</span>`:''}</div>
+      <h3>${m.name}</h3>
+      <p>${m.desc}</p>
+      ${m.tags.length||m.lead?`<div class="meta">${m.tags.map(t=>`<span>${t}</span>`).join('')}${m.lead?`<span class="notice">${m.lead} days' notice</span>`:''}</div>`:''}
+      <div class="price">${money(m.price)} <small>${m.unit}</small></div>
+      ${stepper(`data-item="${m.id}"`, qtyOf(m.id), {label:m.name})}
     </article>`).join('');
 }
-renderMenu();
-document.getElementById('grid').addEventListener('click', e=>{
-  const b = e.target.closest('[data-add]'); if(!b) return;
-  addItem(b.dataset.add);
-  fly(b);
-  b.textContent='Added ✓'; b.classList.add('done');
-  setTimeout(()=>{ b.textContent='Add'; b.classList.remove('done'); }, 1100);
+$('grid').addEventListener('click', e=>{
+  const b = e.target.closest('[data-item]'); if(!b) return;
+  const id = b.dataset.item, d = +b.dataset.d;
+  let line = bag.find(l=>l.id===id);
+  if(!line){ line = {key:id, id, qty:0}; bag.push(line); }
+  line.qty += d;
+  if(line.qty<=0) bag = bag.filter(l=>l!==line);
+  if(d>0) fly(b);
+  changed(d>0 && line.qty===1 ? `${byId[id].name} is in your bag` : '');
 });
-
-function addItem(id){
-  const line = bag.find(l=>l.id===id);
-  if(line) line.qty++; else bag.push({key:id, id, qty:1});
-  afterChange(`${byId[id].name} added`);
-}
-function afterChange(msg){
-  save(); renderCount();
-  if(msg) toast(msg);
-  if(drawer.classList.contains('open')) renderDrawer();
-}
 
 /* ---------- box builder ---------- */
-const flavorsEl = document.getElementById('flavors'), slotsEl = document.getElementById('slots');
-const boxable = MENU.filter(m=>m.box);
-flavorsEl.innerHTML = boxable.map(m=>`<button class="flavor" type="button" data-fl="${m.id}">${art.cookie(m.c)}<span class="n">${m.name}</span><span class="k" data-k="${m.id}">×0</span></button>`).join('');
-flavorsEl.addEventListener('click', e=>{
+const countIn = id => boxSlots.filter(x=>x===id).length;
+function renderBox(){
+  const full = boxSlots.length >= BOX_SIZE;
+  $('flavors').innerHTML = boxable.map(m=>`
+    <div class="flavor">${plate(m,'cookie')}<h4>${m.short}</h4><p>${m.tags.join(' · ') || 'Classic'}</p>
+      ${stepper(`data-fl="${m.id}"`, countIn(m.id), {maxed:full, label:m.name})}</div>`).join('');
+  $('slots').innerHTML = Array.from({length:BOX_SIZE},(_,i)=>{
+    const id = boxSlots[i];
+    return id ? `<button class="slot filled" type="button" data-i="${i}" style="background:var(--${byId[id].disc})" aria-label="Take out ${byId[id].name}">${art.cookie(byId[id].c)}</button>`
+              : `<div class="slot" aria-hidden="true"></div>`;
+  }).join('');
+  $('boxMeter').textContent = `${boxSlots.length} of ${BOX_SIZE}`;
+  const left = BOX_SIZE - boxSlots.length;
+  $('boxAdd').disabled = left > 0;
+  $('boxAdd').textContent = left > 0 ? `Pick ${left} more` : 'Add box to bag';
+  $('boxSurprise').textContent = full ? 'Shuffle it' : boxSlots.length ? 'Fill the rest for me' : 'Surprise me';
+}
+$('flavors').addEventListener('click', e=>{
   const b = e.target.closest('[data-fl]'); if(!b) return;
-  if(boxSlots.length>=BOX_SIZE){ toast('Your box is full. Tap a cookie to swap it out.'); return; }
-  boxSlots.push(b.dataset.fl); renderBox();
+  const id = b.dataset.fl;
+  if(+b.dataset.d > 0){ if(boxSlots.length < BOX_SIZE) boxSlots.push(id); }
+  else { const i = boxSlots.lastIndexOf(id); if(i>-1) boxSlots.splice(i,1); }
+  renderBox();
 });
-slotsEl.addEventListener('click', e=>{
+$('slots').addEventListener('click', e=>{
   const s = e.target.closest('.slot.filled'); if(!s) return;
   boxSlots.splice(+s.dataset.i,1); renderBox();
 });
-document.getElementById('boxSurprise').addEventListener('click', ()=>{
-  boxSlots = Array.from({length:BOX_SIZE}, ()=>boxable[Math.floor(Math.random()*boxable.length)].id);
+$('boxSurprise').addEventListener('click', ()=>{
+  if(boxSlots.length >= BOX_SIZE) boxSlots = [];
+  while(boxSlots.length < BOX_SIZE) boxSlots.push(boxable[Math.floor(Math.random()*boxable.length)].id);
   renderBox();
 });
-document.getElementById('boxAdd').addEventListener('click', e=>{
+$('boxAdd').addEventListener('click', e=>{
   const flavors = [...boxSlots].sort();
   const key = 'box:' + flavors.join(',');
   const line = bag.find(l=>l.key===key);
   if(line) line.qty++; else bag.push({key, box:flavors, qty:1});
   fly(e.currentTarget);
   boxSlots = []; renderBox();
-  afterChange('Cookie box added');
+  changed('Cookie box added to your bag');
 });
-function renderBox(){
-  slotsEl.innerHTML = Array.from({length:BOX_SIZE},(_,i)=>{
-    const id = boxSlots[i];
-    return id ? `<button class="slot filled" type="button" data-i="${i}" aria-label="Remove ${byId[id].name}">${art.cookie(byId[id].c)}<span class="x">✕</span></button>`
-              : `<div class="slot" aria-hidden="true"></div>`;
-  }).join('');
-  boxable.forEach(m=>{ document.querySelector(`[data-k="${m.id}"]`).textContent = '×' + boxSlots.filter(x=>x===m.id).length; });
-  document.getElementById('boxMeter').textContent = `${boxSlots.length} of ${BOX_SIZE} filled`;
-  document.getElementById('boxAdd').disabled = boxSlots.length < BOX_SIZE;
-}
-renderBox();
 
-/* ---------- bag / drawer ---------- */
-const drawer = document.getElementById('drawer'), scrim = document.getElementById('scrim');
-function openBag(){ step = 'bag'; renderDrawer(); drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.getElementById('closeBag').focus(); }
-function closeBag(){ drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
-document.getElementById('bagBtn').addEventListener('click', openBag);
-document.getElementById('closeBag').addEventListener('click', closeBag);
-scrim.addEventListener('click', closeBag);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBag(); });
-
+/* ---------- bag maths ---------- */
 const lineInfo = l => l.box
-  ? {name:'Mix & match cookie box', sub: summarize(l.box), price:BOX_PRICE, art:art.cookie(byId[l.box[0]].c), lead:BASE_LEAD}
-  : {name:byId[l.id].name, sub:byId[l.id].unit, price:byId[l.id].price, art:art[byId[l.id].kind](byId[l.id].c), lead:byId[l.id].lead||BASE_LEAD};
-function summarize(ids){ const c={}; ids.forEach(i=>c[i]=(c[i]||0)+1); return Object.entries(c).map(([i,n])=>`${n}× ${byId[i].name.split(' ').slice(-2).join(' ')}`).join(', '); }
+  ? {name:'Mix & match cookie box', sub:summarize(l.box), price:BOX_PRICE, m:byId[l.box[0]], kind:'cookie', lead:BASE_LEAD}
+  : {name:byId[l.id].name, sub:byId[l.id].unit, price:byId[l.id].price, m:byId[l.id], kind:byId[l.id].kind, lead:byId[l.id].lead||BASE_LEAD};
+function summarize(ids){ const c={}; ids.forEach(i=>c[i]=(c[i]||0)+1); return Object.entries(c).map(([i,n])=>`${n}× ${byId[i].short}`).join(', '); }
 const itemsCount = () => bag.reduce((a,l)=>a+l.qty,0);
 const subtotal = () => bag.reduce((a,l)=>a+lineInfo(l).price*l.qty,0);
 const leadDays = () => bag.reduce((a,l)=>Math.max(a,lineInfo(l).lead), BASE_LEAD);
-function renderCount(){
-  const b = document.getElementById('bagBtn');
-  document.getElementById('bagCount').textContent = itemsCount();
-  b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+const plural = n => `${n} item${n===1?'':'s'}`;
+
+function changed(msg){
+  save(); renderMenu(); renderChrome();
+  if(msg) toast(msg);
+  if(drawer.classList.contains('open')) renderDrawer();
 }
+function renderChrome(){
+  const n = itemsCount(), b = $('bagBtn');
+  $('bagCount').textContent = n;
+  b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+  $('dockTotal').textContent = money(subtotal());
+  $('dockCount').textContent = n ? `${plural(n)} in your bag` : 'Your bag is empty';
+  $('dockBtn').disabled = !n;
+  $('dock').classList.toggle('away', !n);
+  $('dockBtn').textContent = n ? 'Choose a pickup' : 'Add a treat';
+}
+
+/* ---------- drawer ---------- */
+const drawer = $('drawer'), scrim = $('scrim');
+function openBag(toStep){ step = toStep || 'bag'; if(!bag.length) step = 'bag'; renderDrawer(); drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false'); $('closeBag').focus(); }
+function closeBag(){ drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); if(step==='done') step='bag'; }
+$('bagBtn').addEventListener('click', ()=>openBag('bag'));
+$('dockBtn').addEventListener('click', ()=>openBag('when'));
+$('closeBag').addEventListener('click', closeBag);
+scrim.addEventListener('click', closeBag);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeBag(); });
+$('steps').addEventListener('click', e=>{ const b = e.target.closest('[data-step]'); if(!b || b.disabled) return; step = b.dataset.step; renderDrawer(); });
 
 function pickupDates(){
   // Fridays and Saturdays at least `lead` days out, next 6 options
-  const out = [], lead = leadDays();
-  const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+lead);
+  const out = [], d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+leadDays());
   while(out.length<6){ if(d.getDay()===5||d.getDay()===6) out.push(new Date(d)); d.setDate(d.getDate()+1); }
   return out;
 }
-const SLOTS = {5:['4:00 pm','5:00 pm','6:00 pm'], 6:['10:00 am','11:00 am','12:00 pm','1:00 pm']};
+
+function renderSteps(){
+  $('steps').hidden = step==='done';
+  $('steps').querySelectorAll('[data-step]').forEach(b=>{
+    if(b.dataset.step===step) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current');
+    b.disabled = b.dataset.step==='when' && !bag.length;
+  });
+}
 
 function renderDrawer(){
-  const body = document.getElementById('dBody'), foot = document.getElementById('dFoot');
   if(step==='done') return;
-  document.getElementById('dTitle').textContent = 'Your bag';
+  if(!bag.length) step = 'bag';
+  renderSteps();
+  const body = $('dBody'), foot = $('dFoot');
   if(!bag.length){
     body.innerHTML = `<div class="empty"><b>Your bag is empty</b>Add a few treats from the menu, or build a cookie box, and they'll show up here.</div>`;
-    foot.innerHTML = `<a class="btn primary" href="#menu" id="toMenu">Browse the menu</a>`;
-    document.getElementById('toMenu').onclick = closeBag;
+    foot.innerHTML = `<a class="pill coral block" href="#menu" id="toMenu">See the menu</a>`;
+    $('toMenu').onclick = closeBag;
     return;
   }
-  keepForm();
+  const sub = subtotal(), n = itemsCount();
+  if(step==='bag'){
+    body.innerHTML = `<div><h3>Your bag</h3><div style="display:flex;flex-direction:column;gap:16px">${bag.map((l,i)=>{ const x=lineInfo(l); return `
+      <div class="line">${plate(x.m, x.kind)}
+        <div style="min-width:0"><div class="nm">${x.name}</div><div class="sm">${x.sub}</div>${stepper(`data-line="${i}"`, l.qty, {label:x.name})}</div>
+        <div class="lp">${money(x.price*l.qty)}</div></div>`; }).join('')}</div></div>
+      <p class="hint">${leadDays()>BASE_LEAD?`Your bag has a cake, so the earliest pickup is ${CAKE_LEAD} days out.`:"Orders need 2 days' notice."}</p>`;
+    foot.innerHTML = `
+      <div class="row"><span>${plural(n)}</span><span>${money(sub)}</span></div>
+      <div class="row total"><span>Total</span><span>${money(sub)}</span></div>
+      <button class="pill coral block" id="toWhen" type="button">Choose a day</button>`;
+    body.querySelectorAll('[data-line]').forEach(b=>b.onclick=()=>{
+      const l = bag[+b.dataset.line]; l.qty += +b.dataset.d;
+      if(l.qty<=0) bag.splice(+b.dataset.line,1);
+      changed();
+    });
+    $('toWhen').onclick = ()=>{ step='when'; renderDrawer(); };
+    return;
+  }
+  // step === 'when'
   const dates = pickupDates();
   if(pickup.date && !dates.some(d=>d.getTime()===pickup.date)) pickup = {date:null,time:null};
-  const lines = bag.map((l,i)=>{ const x=lineInfo(l); return `
-    <div class="line"><div class="thumb">${x.art}</div>
-      <div style="min-width:0"><div class="nm">${x.name}</div><div class="sm">${x.sub}</div>
-        <div class="qty"><button type="button" data-q="${i}" data-d="-1" aria-label="One fewer">−</button><span>${l.qty}</span><button type="button" data-q="${i}" data-d="1" aria-label="One more">+</button></div></div>
-      <div class="lp">${money(x.price*l.qty)}</div></div>`; }).join('');
   const sel = pickup.date ? new Date(pickup.date) : null;
   body.innerHTML = `
-    ${lines}
-    <fieldset><legend>Pickup day</legend>
+    <div><h3>Which day?</h3>
       <div class="dates">${dates.map(d=>`<button type="button" class="date" data-date="${d.getTime()}" aria-pressed="${pickup.date===d.getTime()}"><small>${d.toLocaleDateString(undefined,{weekday:'short'})}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString(undefined,{month:'short'})}</small></button>`).join('')}</div>
-      <p class="hint">${leadDays()>BASE_LEAD?`Your bag has a cake, so the earliest pickup is ${CAKE_LEAD} days out.`:"Orders need 2 days' notice."}</p>
-    </fieldset>
-    ${sel?`<fieldset><legend>Pickup time</legend><div class="times">${SLOTS[sel.getDay()].map(t=>`<button type="button" class="chip" data-time="${t}" aria-pressed="${pickup.time===t}">${t}</button>`).join('')}</div></fieldset>`:''}
-    <fieldset><legend>Your details</legend>
+      <p class="hint">Pickup is Fridays and Saturdays. ${leadDays()>BASE_LEAD?`Cakes need ${CAKE_LEAD} days' notice, so the first dates are a little further out.`:"Orders need 2 days' notice."}</p></div>
+    ${sel?`<div><h3>What time?</h3><div class="times">${SLOTS[sel.getDay()].map(t=>`<button type="button" class="pill" data-time="${t}" aria-pressed="${pickup.time===t}">${t}</button>`).join('')}</div></div>`:''}
+    <div><h3>Your details</h3>
       <label class="f">Name<input id="oName" autocomplete="name" placeholder="Priya Sharma"></label>
       <label class="f">Phone<input id="oPhone" type="tel" autocomplete="tel" placeholder="(555) 014-2290"></label>
-      <label class="f">Notes for the baker<textarea id="oNotes" rows="2" placeholder="Cake message, allergies, gift wrap…"></textarea></label>
-    </fieldset>
-    <p class="err" id="oErr" hidden></p>`;
-  const sub = subtotal();
+      <label class="f">Gift note or anything we should know (optional)<textarea id="oNotes" rows="2" placeholder="Cake message, allergies, gift wrap…"></textarea></label>
+      <p class="err" id="oErr" hidden></p>
+    </div>
+    <div><button class="pill" type="button" id="toBag">Back to your bag</button></div>`;
+  [['oName','name'],['oPhone','phone'],['oNotes','notes']].forEach(([id,k])=>{ const el=$(id); el.value=form[k]; el.oninput=()=>form[k]=el.value; });
   foot.innerHTML = `
-    <div class="sumrow"><span>${itemsCount()} item${itemsCount()===1?'':'s'}</span><span>${money(sub)}</span></div>
-    <div class="sumrow total"><span>Pay at pickup</span><span>${money(sub)}</span></div>
-    <button class="btn primary" id="placeOrder" type="button">Place pre-order</button>`;
-  restoreForm();
-  body.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
-    const l = bag[+b.dataset.q]; l.qty += +b.dataset.d;
-    if(l.qty<=0) bag.splice(+b.dataset.q,1);
-    afterChange();
-  });
+    <div class="row"><span>${plural(n)}</span><span>${money(sub)}</span></div>
+    <div class="row"><span>Pickup</span><span>Free</span></div>
+    <div class="row"><span>When</span><span>${sel?`${sel.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}${pickup.time?`, ${pickup.time}`:''}`:'Pick a day'}</span></div>
+    <div class="row total"><span>Pay at pickup</span><span>${money(sub)}</span></div>
+    <button class="pill coral block" id="placeOrder" type="button">${!sel?'Pick a day and time':!pickup.time?'Pick a time':'Place pre-order'}</button>`;
   body.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{ pickup={date:+b.dataset.date,time:null}; renderDrawer(); });
   body.querySelectorAll('[data-time]').forEach(b=>b.onclick=()=>{ pickup.time=b.dataset.time; renderDrawer(); });
-  document.getElementById('placeOrder').onclick = placeOrder;
+  $('toBag').onclick = ()=>{ step='bag'; renderDrawer(); };
+  $('placeOrder').onclick = placeOrder;
 }
-let formDraft = {};
-function keepForm(){ ['oName','oPhone','oNotes'].forEach(id=>{ const el=document.getElementById(id); if(el) formDraft[id]=el.value; }); }
-function restoreForm(){ Object.entries(formDraft).forEach(([id,v])=>{ const el=document.getElementById(id); if(el) el.value=v; }); }
 
+function orderCode(){
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return 'SD-' + Array.from({length:4}, ()=>abc[Math.floor(Math.random()*abc.length)]).join('');
+}
 function placeOrder(){
-  keepForm();
-  const err = document.getElementById('oErr');
-  const name = (formDraft.oName||'').trim(), phone = (formDraft.oPhone||'').trim();
+  const err = $('oErr');
+  const name = form.name.trim(), phone = form.phone.trim();
   const problem = !pickup.date ? 'Choose a pickup day.' : !pickup.time ? 'Choose a pickup time.' : !name ? 'Add your name so we can label your box.' : phone.replace(/\D/g,'').length<7 ? 'Add a phone number we can text when your order is ready.' : '';
-  if(problem){ err.textContent = problem; err.hidden = false; return; }
-  const code = 'SD-' + Math.random().toString(36).slice(2,6).toUpperCase().padEnd(4,'0');
-  const d = new Date(pickup.date);
+  if(problem){ err.textContent = problem; err.hidden = false; err.scrollIntoView({block:'nearest'}); return; }
+  const d = new Date(pickup.date), total = subtotal();
   const items = bag.map(l=>{ const x=lineInfo(l); return `<li><span>${l.qty}× ${x.name}</span><span>${money(x.price*l.qty)}</span></li>`; }).join('');
-  const total = subtotal();
-  step = 'done';
-  document.getElementById('dTitle').textContent = 'Order placed';
-  document.getElementById('dBody').innerHTML = `
+  step = 'done'; renderSteps();
+  $('dBody').innerHTML = `
     <div class="ticket">
       <h3>Thank you, ${esc(name.split(' ')[0])}!</h3>
-      <div>Order code <span class="code">${code}</span></div>
+      <p>Your order code</p>
+      <div class="code">${orderCode()}</div>
       <ul>${items}</ul>
-      <div class="sumrow total"><span>Due at pickup</span><span>${money(total)}</span></div>
-      <p>Pickup: ${d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})} at ${pickup.time}</p>
+      <div class="row total"><span>Due at pickup</span><span>${money(total)}</span></div>
+      <p><b>Pickup:</b> ${d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}, ${pickup.time}</p>
       <p class="hint">We'll text ${esc(phone)} with the pickup address the day before.</p>
     </div>`;
-  document.getElementById('dFoot').innerHTML = `<button class="btn primary" id="again" type="button">Start a new order</button>`;
-  document.getElementById('again').onclick = ()=>{ step='bag'; closeBag(); };
-  bag = []; pickup = {date:null,time:null}; formDraft = {}; save(); renderCount();
+  $('dFoot').innerHTML = `<button class="pill coral block" id="again" type="button">Start a new order</button>`;
+  $('again').onclick = closeBag;
+  bag = []; pickup = {date:null,time:null}; form = {name:'',phone:'',notes:''};
+  save(); renderMenu(); renderChrome();
 }
 
 /* ---------- little delights ---------- */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function fly(from){
   if(reduce) return;
-  const a = from.getBoundingClientRect(), b = document.getElementById('bagBtn').getBoundingClientRect();
+  const a = from.getBoundingClientRect(), b = $('bagBtn').getBoundingClientRect();
   const dot = document.createElement('div'); dot.className='flyer';
   dot.style.left = a.left + a.width/2 - 9 + 'px'; dot.style.top = a.top + a.height/2 - 9 + 'px';
   document.body.appendChild(dot);
   dot.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${(b.left+b.width/2)-(a.left+a.width/2)}px,${(b.top+b.height/2)-(a.top+a.height/2)}px) scale(.4)`}],{duration:600,easing:'cubic-bezier(.5,-0.3,.7,1)'}).onfinish=()=>dot.remove();
 }
 let tt;
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),1800); }
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),1800); }
 
-renderCount();
+renderMenu(); renderBox(); renderChrome();
 })();

@@ -7,104 +7,131 @@
   <meta name="description" content="Stardust is a small-batch home bakery. Pre-order cookies, cupcakes, brownies and cakes for Friday or Saturday pickup.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="top">
-  <div class="wrap">
-    <a class="logo" href="#top">Stardust</a>
-    <nav class="links" aria-label="Sections">
-      <a href="#menu">Menu</a><a href="#box">Build a box</a><a href="#how">How it works</a>
+  <div class="bar">
+    <a class="logo" href="#top" aria-label="Stardust home"><span class="mark" aria-hidden="true"></span>stardust</a>
+    <nav class="links" id="navLinks" aria-label="Sections">
+      <a href="#menu">Menu</a><a href="#box">Build a box</a><a href="#visit">Pickup</a><a href="#faq">Good to know</a>
     </nav>
-    <button class="bag-btn" id="bagBtn" aria-label="Open pre-order bag">Your bag <span class="count" id="bagCount">0</span></button>
+    <div class="bar-end">
+      <button class="pill dark" id="bagBtn" type="button" aria-label="Open your bag">Your bag <span class="count" id="bagCount">0</span></button>
+      <button class="burger" id="burger" type="button" aria-label="Show sections" aria-expanded="false" aria-controls="navLinks"><span></span></button>
+    </div>
   </div>
 </header>
 
+<main>
 <section class="hero" id="top">
-  <div class="wrap">
-    <div>
-      <p class="eyebrow">Small-batch home bakery · Pre-order only</p>
-      <h1>Baked to order, <em>picked up warm.</em></h1>
-      <p class="lede">We bake in small weekend batches, so every cookie, cupcake and cake is made for someone who already said yes. Pick your treats, choose a pickup slot, and we'll have them boxed and waiting.</p>
-      <div class="cta-row">
-        <a class="btn primary" href="#menu">Browse this week's menu</a>
-        <a class="btn ghost" href="#box">Build a cookie box</a>
-      </div>
+  <div class="plates plates-top" id="platesTop" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <p class="kicker">Small-batch home bakery · Pre-order only</p>
+    <h1>Treats <em>worth</em> the wait.</h1>
+    <p class="lede">Everything is baked in small weekend batches for someone who already said yes. Pick your treats, choose a pickup slot, and we'll have them boxed and waiting.</p>
+    <div class="cta-row">
+      <a class="pill dark lg" href="#menu">Order now</a>
+      <a class="pill lg" href="#box">Build a box</a>
     </div>
-    <aside class="cutoff" aria-live="polite">
-      <p class="eyebrow">This weekend's batch</p>
-      <p class="big" id="cutoffTitle">Orders close Thursday at 8 pm</p>
-      <div class="clock" id="clock">
-        <div><b id="cd-d">0</b><span>days</span></div>
-        <div><b id="cd-h">00</b><span>hrs</span></div>
-        <div><b id="cd-m">00</b><span>min</span></div>
-        <div><b id="cd-s">00</b><span>sec</span></div>
-      </div>
-      <small id="cutoffNote">Pickup Friday 4–7 pm and Saturday 10 am–2 pm.</small>
-    </aside>
   </div>
-</section>
 
-<div class="ticker" aria-hidden="true"><div class="track" id="ticker"></div></div>
-
-<section class="steps" id="how">
-  <div class="wrap">
-    <p class="eyebrow">How pre-ordering works</p>
-    <h2>Three steps to a full treat box</h2>
-    <ol>
-      <li><h3>Pick your treats</h3><p>Add anything from the weekly menu, or fill a mix-and-match box of six cookies.</p></li>
-      <li><h3>Choose a pickup slot</h3><p>Friday evening or Saturday morning. Cakes need five days' notice, everything else two.</p></li>
-      <li><h3>Collect and enjoy</h3><p>Show your order code at pickup and pay by card or cash. Boxes are packed the morning of.</p></li>
-    </ol>
+  <div class="cutoff" aria-live="polite">
+    <p class="cutoff-title" id="cutoffTitle">Orders close Thursday at 8 pm</p>
+    <div class="clock">
+      <div class="tick"><b id="cd-d">0</b><span>days</span></div>
+      <div class="tick"><b id="cd-h">00</b><span>hrs</span></div>
+      <div class="tick"><b id="cd-m">00</b><span>min</span></div>
+      <div class="tick hot"><b id="cd-s">00</b><span>sec</span></div>
+    </div>
+    <p class="cutoff-note" id="cutoffNote">Pickup Friday 4 to 7 pm and Saturday 10 am to 2 pm.</p>
   </div>
+  <div class="plates plates-bottom" id="platesBottom" aria-hidden="true"></div>
 </section>
 
 <section class="menu" id="menu">
   <div class="wrap">
-    <div class="menu-head">
-      <div><p class="eyebrow">This week's menu</p><h2>Fresh from the oven</h2></div>
-      <div class="chips" id="chips" role="group" aria-label="Filter menu"></div>
-    </div>
+    <h2>This week's menu</h2>
+    <p class="sub">Tap + to add a treat to your bag. Cakes need five days' notice, everything else two.</p>
+    <div class="filters" id="chips" role="group" aria-label="Filter the menu"></div>
     <div class="grid" id="grid"></div>
   </div>
 </section>
 
 <section class="builder" id="box">
-  <div class="wrap">
-    <div class="panel">
-      <div>
-        <p class="eyebrow">Mix &amp; match · $19 for 6</p>
-        <h2>Build your cookie box</h2>
-        <p class="sub">Tap a flavor to drop it in the box. Tap a cookie in the box to take it back out. Six cookies make a full box.</p>
-        <div class="flavors" id="flavors"></div>
+  <div class="wrap builder-wrap">
+    <div class="builder-main">
+      <h2>Build your box</h2>
+      <p class="sub">Six cookies, any mix you like, for $19. Fill it yourself or let us pick, and we'll pack it the morning you collect it.</p>
+      <div class="fill-head">
+        <h3>Fill it up</h3>
+        <button class="linkish" id="boxSurprise" type="button">Surprise me</button>
       </div>
-      <div>
-        <div class="box"><div class="slots" id="slots"></div></div>
-        <div class="box-foot">
-          <span class="meter" id="boxMeter">0 of 6 filled</span>
-          <div class="cta-row">
-            <button class="btn ghost" id="boxSurprise" type="button">Surprise me</button>
-            <button class="btn primary" id="boxAdd" type="button" disabled>Add box to bag</button>
-          </div>
-        </div>
+      <div class="flavors" id="flavors"></div>
+    </div>
+
+    <aside class="box-card" aria-label="Your cookie box">
+      <div class="box-head"><h3>Box of 6</h3><span id="boxMeter">0 of 6</span></div>
+      <div class="slots" id="slots"></div>
+      <p class="box-hint">Tap a cookie in the box to take it out.</p>
+      <div class="box-rows">
+        <div class="row"><span>Box of 6</span><span>$19.00</span></div>
+        <div class="row total"><span>Total</span><span>$19.00</span></div>
+      </div>
+      <button class="pill coral block" id="boxAdd" type="button" disabled>Pick 6 more</button>
+    </aside>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap visit-wrap">
+    <div>
+      <h2>Come say hi</h2>
+      <p class="sub">Pickup is from our home kitchen. We'll text you the address the day before, along with a reminder of your slot.</p>
+      <dl class="hours">
+        <dt>Friday</dt><dd>4 pm to 7 pm</dd>
+        <dt>Saturday</dt><dd>10 am to 2 pm</dd>
+        <dt>Sun to Wed</dt><dd>Closed, we're resting</dd>
+        <dt>Thursday</dt><dd>Orders close at 8 pm</dd>
+      </dl>
+    </div>
+    <div id="faq">
+      <h2>Good to know</h2>
+      <div class="faq">
+        <details open><summary>When do I need to order by?</summary><p>Thursday at 8 pm for that weekend's batch. Cakes need five days' notice, so order those by the Sunday or Monday before.</p></details>
+        <details><summary>How do I pay?</summary><p>Pay by card or cash when you pick up. Show your order code (it starts with SD-) and we'll hand over your box.</p></details>
+        <details><summary>How long do the treats keep?</summary><p>Cookies and brownies stay good for three days in an airtight tin. Cupcakes and cakes are best within two days, kept cool.</p></details>
+        <details><summary>What about allergies?</summary><p>Our kitchen handles wheat, dairy, eggs and tree nuts. GF items are made without gluten but in a shared kitchen, so add any allergies in your order notes.</p></details>
       </div>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
-    <div><h4>Stardust</h4><p>A home bakery baking in small weekend batches. Everything is made to order, so nothing goes to waste.</p></div>
-    <div><h4>Pickup</h4><p>Friday 4–7 pm · Saturday 10 am–2 pm<br>Address shared with your order confirmation.</p></div>
-    <div><h4>Allergens</h4><p>Our kitchen handles wheat, dairy, eggs and tree nuts. GF items are made without gluten but in a shared kitchen.</p></div>
+    <a class="logo light" href="#top"><span class="mark" aria-hidden="true"></span>stardust</a>
+    <nav class="foot-links" aria-label="Footer"><a href="#menu">Menu</a><a href="#box">Build a box</a><a href="#faq">Good to know</a></nav>
+    <p>Baked in the morning, gone by the evening.</p>
   </div>
 </footer>
 
+<div class="dock" id="dock">
+  <div><b id="dockTotal">$0.00</b><span id="dockCount">Your bag is empty</span></div>
+  <button class="pill coral" id="dockBtn" type="button" disabled>Add a treat</button>
+</div>
+
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" aria-label="Pre-order bag" aria-hidden="true">
-  <div class="d-head"><h2 id="dTitle">Your bag</h2><button class="icon-btn" id="closeBag" aria-label="Close bag">✕</button></div>
+<aside class="drawer" id="drawer" aria-label="Your bag" aria-hidden="true">
+  <div class="d-head">
+    <div class="steps" id="steps">
+      <button type="button" class="step" data-step="bag"><i>1</i>Your bag</button>
+      <button type="button" class="step" data-step="when"><i>2</i>When</button>
+    </div>
+    <button class="icon-btn" id="closeBag" type="button" aria-label="Close bag">✕</button>
+  </div>
   <div class="d-body" id="dBody"></div>
   <div class="d-foot" id="dFoot"></div>
 </aside>
