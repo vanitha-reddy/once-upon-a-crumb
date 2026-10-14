@@ -12,12 +12,14 @@ const art = {
 /* ---------- menu data (edit treats and prices here) ---------- */
 // disc: the coloured circle each treat sits on (butter, lav, pink, sky, mint, peach)
 // img: optional photo path, e.g. 'images/nutella.png'; without one the drawn cookie is used
+// inside: optional cut-open photo; adds a "See inside" button to the menu card
 // Prices are placeholders until confirmed.
 const MENU = [
-  {id:'nutella', name:'Nutella Hazelnut', short:'Nutella hazelnut', cat:'Cookies', price:3.5, unit:'each', desc:'A golden cookie crowned with a pool of Nutella and a scatter of chopped toasted hazelnuts.', tags:['Nuts'], kind:'cookie', c:['#B9783F','#4A2416'], disc:'butter', img:'images/nutella-hazelnut.png', flag:'Bestseller', box:true},
+  {id:'nutella', name:'Nutella Hazelnut', short:'Nutella hazelnut', cat:'Cookies', price:3.5, unit:'each', desc:'A golden cookie crowned with a pool of Nutella and a scatter of chopped toasted hazelnuts.', tags:['Nuts'], kind:'cookie', c:['#B9783F','#4A2416'], disc:'butter', img:'images/nutella-hazelnut.png', inside:'images/nutella-hazelnut-inside.png', flag:'Bestseller', box:true},
   {id:'kinder', name:'Kinder Bueno', short:'Kinder Bueno', cat:'Cookies', price:3.5, unit:'each', desc:'Chunky cookie topped with Kinder Bueno pieces and a drizzle of hazelnut cream.', tags:['Nuts'], kind:'cookie', c:['#D9A866',['#F5EBDD','#6B3A1F']], disc:'sky', img:'images/kinder-bueno.png', box:true},
-  {id:'biscoff', name:'Lotus Biscoff', short:'Lotus Biscoff', cat:'Cookies', price:3.5, unit:'each', desc:'Brown sugar cookie with a whole Lotus biscuit on top and drips of Biscoff caramel.', tags:[], kind:'cookie', c:['#C98A4B','#8A4E22'], disc:'pink', img:'images/lotus-biscoff.png', box:true},
-  {id:'oreo', name:'Oreo Cookies and Cream', short:'Oreo cookies and cream', cat:'Cookies', price:3.5, unit:'each', desc:'Studded with Oreo crumbs, filled with cookies-and-cream and topped with half an Oreo.', tags:[], kind:'cookie', c:['#2E2220','#F5EFE6'], disc:'lav', img:'images/oreo-cookies-and-cream.png', flag:'New', box:true},
+  {id:'mm', name:'M&M', short:'M&M', cat:'Cookies', price:3.5, unit:'each', desc:'Chewy vanilla cookie loaded with crunchy, colourful M&Ms.', tags:[], kind:'cookie', c:['#E8BF85',['#E5574B','#3C7DD9','#F4C430','#3BA55C','#8A4E22','#F08A24']], disc:'peach', box:true},
+  {id:'biscoff', name:'Lotus Biscoff', short:'Lotus Biscoff', cat:'Cookies', price:3.5, unit:'each', desc:'Brown sugar cookie with a whole Lotus biscuit on top and drips of Biscoff caramel.', tags:[], kind:'cookie', c:['#C98A4B','#8A4E22'], disc:'pink', img:'images/lotus-biscoff.png', inside:'images/lotus-biscoff-inside.png', box:true},
+  {id:'oreo', name:'Oreo Cookies and Cream', short:'Oreo cookies and cream', cat:'Cookies', price:3.5, unit:'each', desc:'Studded with Oreo crumbs, filled with cookies-and-cream and topped with half an Oreo.', tags:[], kind:'cookie', c:['#2E2220','#F5EFE6'], disc:'lav', img:'images/oreo-cookies-and-cream.png', inside:'images/oreo-cookies-and-cream-inside.png', flag:'New', box:true},
   {id:'toffee', name:'Toffee Chocolate Chunk', short:'Toffee choc chunk', cat:'Cookies', price:3.5, unit:'each', desc:'Buttery cookie packed with dark chocolate chunks and chewy pieces of toffee.', tags:[], kind:'cookie', c:['#D9A15E',['#3A1E14','#E2A23B']], disc:'mint', img:'images/toffee-chocolate-chunk.png', box:true}
 ];
 // Filters only show for categories that have treats on the menu
@@ -89,11 +91,13 @@ chipsEl.addEventListener('click', e=>{
   chipsEl.querySelectorAll('[data-cat]').forEach(x=>x.setAttribute('aria-pressed', x===b));
   renderMenu();
 });
+const showInside = new Set();
 const qtyOf = id => (bag.find(l=>l.id===id)||{qty:0}).qty;
 function renderMenu(){
   $('grid').innerHTML = MENU.filter(m=>filter==='All'||m.cat===filter).map(m=>`
     <article class="item">
-      <div class="plate" style="background:var(--${m.disc})">${pic(m)}${m.flag?`<span class="flag">${m.flag}</span>`:''}</div>
+      <div class="plate${showInside.has(m.id)?' inside':''}" style="background:var(--${m.disc})">${pic(m)}${m.inside?`<img class="cut" src="${m.inside}" alt="${m.name} cut open, showing the filling">`:''}${m.flag?`<span class="flag">${m.flag}</span>`:''}</div>
+      ${m.inside?`<button class="peek" type="button" data-peek="${m.id}" aria-pressed="${showInside.has(m.id)}">${showInside.has(m.id)?'See outside':'See inside'}</button>`:''}
       <h3>${m.name}</h3>
       <p>${m.desc}</p>
       ${m.tags.length||m.lead?`<div class="meta">${m.tags.map(t=>`<span>${t}</span>`).join('')}${m.lead?`<span class="notice">${m.lead} days' notice</span>`:''}</div>`:''}
@@ -102,6 +106,8 @@ function renderMenu(){
     </article>`).join('');
 }
 $('grid').addEventListener('click', e=>{
+  const pk = e.target.closest('[data-peek]');
+  if(pk){ const id = pk.dataset.peek; showInside.has(id) ? showInside.delete(id) : showInside.add(id); renderMenu(); return; }
   const b = e.target.closest('[data-item]'); if(!b) return;
   const id = b.dataset.item, d = +b.dataset.d;
   let line = bag.find(l=>l.id===id);
