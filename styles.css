@@ -63,7 +63,8 @@ nav.links a:hover{color:var(--coral)}
 /* round plates: an illustration sitting on a coloured disc */
 .plate{border-radius:50%;display:grid;place-items:center;flex:none;aspect-ratio:1}
 .plate svg{width:72%;height:auto}
-.plate img{width:84%;height:84%;object-fit:cover;border-radius:50%;display:block}
+.plate img,.slot img{width:96%;height:96%;object-fit:contain;display:block;filter:drop-shadow(0 8px 10px rgba(42,23,21,.22))}
+.slot img{width:92%;height:92%;filter:drop-shadow(0 4px 5px rgba(0,0,0,.3))}
 
 /* hero */
 .hero{overflow:hidden;padding-bottom:20px}
