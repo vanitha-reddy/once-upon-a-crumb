@@ -1,6 +1,6 @@
-# Stardust Bakes
+# Once Upon a Crumb
 
-Pre-order website for Stardust, a small-batch home bakery.
+Pre-order website for Once Upon a Crumb, a small-batch home bakery.
 
 - `index.html` – page structure
 - `styles.css` – colors, fonts and layout
@@ -8,3 +8,5 @@ Pre-order website for Stardust, a small-batch home bakery.
 
 To view it, double-click `index.html` (or run `open index.html` in this folder).
 Edit the `MENU` list at the top of `script.js` to change treats and prices.
+
+The logo is `images/logo-mark.svg` (the cookie on its own) and `images/logo.svg` (cookie with the name).

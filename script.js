@@ -275,7 +275,7 @@ function renderDrawer(){
 
 function orderCode(){
   const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return 'SD-' + Array.from({length:4}, ()=>abc[Math.floor(Math.random()*abc.length)]).join('');
+  return 'OC-' + Array.from({length:4}, ()=>abc[Math.floor(Math.random()*abc.length)]).join('');
 }
 function placeOrder(){
   const err = $('oErr');
