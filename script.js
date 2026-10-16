@@ -37,14 +37,17 @@ const stepper = (attrs, n, {min=0, maxed=false, label=''}={}) => `
   <div class="stepper"><button type="button" ${attrs} data-d="-1" aria-label="One fewer ${label}" ${n<=min?'disabled':''}>−</button><output>${n}</output><button type="button" class="plus" ${attrs} data-d="1" aria-label="One more ${label}" ${maxed?'disabled':''}>+</button></div>`;
 
 /* ---------- state ---------- */
+// Opening index.html?test runs tests.js against the live page, using its own saved bag
+const TEST_MODE = new URLSearchParams(location.search).has('test');
+const BAG_KEY = TEST_MODE ? 'crumb-test-bag' : 'sd-bag';
 let bag = load();                       // [{key, id?, box?:[ids], qty}]
 let boxSlots = [];
 let filter = 'All';
 let pickup = {date:null, time:null};
 let step = 'bag';                       // bag | when | done
 let form = {name:'', phone:'', notes:''};
-function load(){ try{ const v = JSON.parse(localStorage.getItem('sd-bag')); return Array.isArray(v) ? v.filter(l=>l && l.qty>0 && (l.box ? l.box.every(i=>byId[i]) : byId[l.id])) : []; }catch(e){ return []; } }
-function save(){ try{ localStorage.setItem('sd-bag', JSON.stringify(bag)); }catch(e){} }
+function load(){ try{ const v = JSON.parse(localStorage.getItem(BAG_KEY)); return Array.isArray(v) ? v.filter(l=>l && l.qty>0 && (l.box ? l.box.every(i=>byId[i]) : byId[l.id])) : []; }catch(e){ return []; } }
+function save(){ try{ localStorage.setItem(BAG_KEY, JSON.stringify(bag)); }catch(e){} }
 
 /* ---------- header ---------- */
 const burger = $('burger'), navLinks = $('navLinks');
@@ -199,9 +202,9 @@ scrim.addEventListener('click', closeBag);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeBag(); });
 $('steps').addEventListener('click', e=>{ const b = e.target.closest('[data-step]'); if(!b || b.disabled) return; step = b.dataset.step; renderDrawer(); });
 
-function pickupDates(){
+function pickupDates(lead = leadDays(), now = new Date()){
   // Fridays and Saturdays at least `lead` days out, next 6 options
-  const out = [], d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+leadDays());
+  const out = [], d = new Date(now); d.setHours(0,0,0,0); d.setDate(d.getDate()+lead);
   while(out.length<6){ if(d.getDay()===5||d.getDay()===6) out.push(new Date(d)); d.setDate(d.getDate()+1); }
   return out;
 }
@@ -315,4 +318,15 @@ let tt;
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),1800); }
 
 renderMenu(); renderBox(); renderChrome();
+
+/* ---------- test hooks (only with ?test) ---------- */
+if(TEST_MODE){
+  window.crumb = {
+    MENU, SLOTS, BOX_PRICE, BOX_SIZE, BASE_LEAD, CAKE_LEAD, BAG_KEY,
+    nextCutoff, pickupDates, orderCode, money, summarize,
+    state: () => JSON.parse(JSON.stringify({bag, boxSlots, pickup, step, form})),
+    reset(){ bag = []; boxSlots = []; pickup = {date:null,time:null}; step = 'bag'; form = {name:'',phone:'',notes:''}; filter = 'All'; showInside.clear(); closeBag(); save(); renderMenu(); renderBox(); renderChrome(); }
+  };
+  const t = document.createElement('script'); t.src = 'tests.js'; document.body.appendChild(t);
+}
 })();
